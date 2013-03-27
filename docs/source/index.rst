@@ -16,6 +16,7 @@ A Company asked me to write a class that implements the following specification:
     In addition to methods for adding and removing vertices, class Graph should define (at minimum) the following instance
     methods
 
+.. code-block:: python
     def neighbor_vertices(self, a):
     """
     Return a sequence of vertices that are neighbors of vertex a (e.g. are joined by a single edge). Raise
