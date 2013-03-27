@@ -4,7 +4,7 @@ INFINITY = float('inf')
 
 class Graph(object):
     """
-    A Minigraph class.  Implements the following specification:
+    A miniature graph class.  Implements the following specification:
 
     A class Graph representing an undirected graph structure with weighted edges
     (i.e. a set of vertices with undirected edges connecting pairs of vertices, where each edge has a nonnegative weight).
@@ -270,6 +270,6 @@ class Graph(object):
         VertexDoesNotExist
         >>> G = Graph(edges=[('a','c',10),('b','c',2),('c','f',20),('a','d',1),('d','e',5),('e','f',16),('e','h',1),('h','f',4),('d','h',7),('d','g',2)])
         >>> G.minimum_edge_path('a','f')
-        (2, ['a', 'c', 'f']
+        (2, ['a', 'c', 'f'])
         """
         return self._single_source_shortest_path(a,b,False)
