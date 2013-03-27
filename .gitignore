@@ -1,4 +1,4 @@
 *.pyc
-doc/build
+docs/build
 .project
 .idea

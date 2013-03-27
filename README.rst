@@ -1,3 +1,3 @@
 Documetation available at
 
-`<erikgraph.readthedocs.org>`_
+`<https://erikgraph.readthedocs.org/en/latest/>`_

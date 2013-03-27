@@ -1,0 +1,126 @@
+Trying:
+    G = Graph(['a'],[('a','b',2),('b','c',1)])
+Expecting nothing
+ok
+Trying:
+    'b' in G.data
+Expecting:
+    True
+ok
+Trying:
+    'c' in G.data
+Expecting:
+    True
+ok
+Trying:
+    'd' in G.data
+Expecting:
+    False
+ok
+Trying:
+    G = Graph()
+Expecting nothing
+ok
+Trying:
+    G.add_edge('a','b',1)
+Expecting nothing
+ok
+Trying:
+    G.data['b']['a'] == 1
+Expecting:
+    True
+ok
+Trying:
+    G = Graph()
+Expecting nothing
+ok
+Trying:
+    G.add_vertex('a')
+Expecting nothing
+ok
+Trying:
+    G.data['a']
+Expecting:
+    {}
+ok
+Trying:
+    G.data['b']
+Expecting:
+    Traceback (most recent call last):
+        ...
+    KeyError: 'b'
+ok
+Trying:
+    G = Graph(edges=[('a','b',2)])
+Expecting nothing
+ok
+Trying:
+    G.get_edge_weight('a','b')
+Expecting:
+    2
+ok
+Trying:
+    G = Graph(vertices=['a'],edges=[('b','c',1),('a','c',2),('c','d',4)])
+Expecting nothing
+ok
+Trying:
+    G.minimum_edge_path('a','d')
+Expecting:
+    (2, ['c', 'd'])
+ok
+Trying:
+    G = Graph(vertices=['a'],edges=[('b','c',1),('a','c',2),('c','d',4)])
+Expecting nothing
+ok
+Trying:
+    G.minimum_weight_path('a','d')
+Expecting:
+    (6, ['c', 'd'])
+ok
+Trying:
+    G = Graph(vertices=['a'],edges=[('b','c',1),('d','c',2)])
+Expecting nothing
+ok
+Trying:
+    ns = G.neighbor_vertices('c')
+Expecting nothing
+ok
+Trying:
+    'b' in ns and 'd' in ns and 'a' not in ns
+Expecting:
+    True
+ok
+Trying:
+    G = Graph(vertices=['a'],edges=[('b','c',1)])
+Expecting nothing
+ok
+Trying:
+    G.neighbors('c','b')
+Expecting:
+    True
+ok
+Trying:
+    G.neighbors('a','c')
+Expecting:
+    False
+ok
+7 items had no tests:
+    __init__
+    __init__.Graph
+    __init__.Graph._single_source_shortest_path
+    __init__.Graph.delete_edge
+    __init__.Graph.delete_vertex
+    __init__.Graph.vertices
+    __init__.VertexDoesNotExist
+8 items passed all tests:
+   4 tests in __init__.Graph.__init__
+   3 tests in __init__.Graph.add_edge
+   4 tests in __init__.Graph.add_vertex
+   2 tests in __init__.Graph.get_edge_weight
+   2 tests in __init__.Graph.minimum_edge_path
+   2 tests in __init__.Graph.minimum_weight_path
+   3 tests in __init__.Graph.neighbor_vertices
+   3 tests in __init__.Graph.neighbors
+23 tests in 15 items.
+23 passed and 0 failed.
+Test passed.
