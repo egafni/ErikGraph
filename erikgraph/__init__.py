@@ -167,11 +167,11 @@ class Graph(object):
         except KeyError:
             raise VertexDoesNotExist, 'The vertex <{0}> does not exist in this graph'.format(a)
 
-    def _single_source_shortest_path(self,a, b, use_weights=True):
+    def single_source_shortest_path(self,a, b, use_weights=True):
         """
         Implements Dijstra's algorithm to determine the shortest path between vertices a and b
 
-        :return: a 2-tuple comprising the minimum-weight path connecting vertices a and b, and the associated minimum weight.
+        :return: a 2-tuple comprising the minimum weight used by the shortest path from a to b, and the path used.
             Return None if no such path exists.
         :raises VertexDoesNotExist: if a or b are not in the graph.
         """
@@ -221,7 +221,7 @@ class Graph(object):
         """
         Implementation of Single Source Shortest Path using Dijkstra's
 
-        :return: a 2-tuple comprising the minimum-weight path connecting vertices a and b, and the associated minimum weight.
+        :return: a 2-tuple comprising the minimum weight used by the shortest path from a to b, and the path used.
             Return None if no such path exists.
         :raises VertexDoesNotExist: if a or b are not in the graph.
 
@@ -243,15 +243,14 @@ class Graph(object):
         >>> G.minimum_weight_path('a','f')
         (11, ['a', 'd', 'e', 'h', 'f'])
         """
-        return self._single_source_shortest_path(a,b)
+        return self.single_source_shortest_path(a,b)
 
 
 
     def minimum_edge_path(self, a, b):
         """
-        :return: a 2-tuple comprising the minimum-edge path connecting vertices a and b, and the associated minimum number
-            of edges (e.g. a path comprising 3 edges is shorter than a path comprising 4 edges, regardless of the edge weights).
-            Return None if no such path exists. Raise an exception if a or b are not in the graph.
+        :return: a 2-tuple comprising the fewest number of edges required to get from vertex a to vertex b, and
+            the path used.  Returns None of there is no path from at to b.
         :raises VertexDoesNotExist: if a or b are not in the graph.
 
         >>> G = Graph(vertices=['x','y'],edges=[('x','y',3),('b','c',1),('a','c',2),('c','d',6),('d','e',2),('c','e',100)])
@@ -272,4 +271,4 @@ class Graph(object):
         >>> G.minimum_edge_path('a','f')
         (2, ['a', 'c', 'f'])
         """
-        return self._single_source_shortest_path(a,b,False)
+        return self.single_source_shortest_path(a,b,False)

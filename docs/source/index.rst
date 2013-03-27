@@ -129,7 +129,7 @@ that utilizes the fewest number of total edges.
     print G.minimum_weight_path('a','f')
     (11, ['a', 'd', 'e', 'h', 'f'])
     print G.minimum_edge_path('a','f')
-    (2, ['a', 'c', 'f']
+    (2, ['a', 'c', 'f'])
 
 
 See the method's API for details, which has plenty of examples.

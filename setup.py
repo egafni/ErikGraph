@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='ErikGraph',
-      version='.1',
+      version='.2',
       description='Graph class with implementation of Dijkstra\'s SSSP',
       author='Erik Gafni',
       author_email='egafni@gmail.com',
