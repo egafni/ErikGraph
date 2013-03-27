@@ -10,3 +10,5 @@ setup(name='MiniGraph',
       url='http://github.com/egafni/MiniGraph/',
       packages=['minigraph'],
       )
+
+from networkx.algorithms import sho
