@@ -57,7 +57,21 @@ class Graph(object):
 
 
     def delete_vertex(self,v):
-        pass
+        """
+        :param v: the vertex to delete
+
+        >>> G = Graph(['x'],[('a','b',1)])
+        >>> 'b' in G.data
+        True
+        >>> G.delete_vertex('b')
+        >>> 'b' in G.data
+        False
+        >>> 'b' in G.neighbor_vertices('a')
+        False
+        """
+        for neighbor in self.neighbor_vertices(v):
+            del self.data[neighbor][v]
+        del self.data[v]
 
     def add_edge(self,v1,v2,weight):
         """
