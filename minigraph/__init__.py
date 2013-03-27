@@ -65,7 +65,7 @@ class Graph(object):
         :param v2: The other vertex.
         :param weight: The weight associated with the edge.
 
-        .. note:: Does not check if the edge already exists.
+        .. warning: If the edge already exists, its weight will be replaced with `weight`
 
         >>> G = Graph()
         >>> G.add_edge('a','b',1)
@@ -77,17 +77,35 @@ class Graph(object):
 
     def delete_edge(self,v1,v2):
         """
-        :param
+        :param v1: a vertex
+        :param v2: a neighbor of v1
+        :raises VertexDoesNotExist: if a or b are not in the graph
+
+        >>> G = Graph(edges=[('a','b',2)])
+        >>> G.neighbors('a','b')
+        True
+        >>> G.delete_edge('b','a')
+        >>> G.neighbors('a','b')
+        False
         """
+        try:
+            del self.data[v1][v2]
+            del self.data[v2][v1]
+        except KeyError:
+            raise VertexDoesNotExist
 
     def get_edge_weight(self, a , b):
         """
         :returns: The weight of the edge connecting a to b
-        :raises: VertexDoesNotExist if a or b are not in the graph
+        :raises VertexDoesNotExist: if a or b are not in the graph
 
         >>> G = Graph(edges=[('a','b',2)])
         >>> G.get_edge_weight('a','b')
         2
+        >>> G.get_edge_weight('a','x')
+        Traceback (most recent call last):
+        ...
+        VertexDoesNotExist
         """
         try:
             return self.data[a][b]
@@ -98,12 +116,16 @@ class Graph(object):
     def neighbor_vertices(self, a):
         """
         :return: a sequence of vertices that are neighbors of vertex a (e.g. are joined by a single edge).
-        :raises: VertexDoesNotExist if a is not in the graph.
+        :raises VertexDoesNotExist: if a is not in the graph.
 
         >>> G = Graph(vertices=['a'],edges=[('b','c',1),('d','c',2)])
         >>> ns = G.neighbor_vertices('c')
         >>> 'b' in ns and 'd' in ns and 'a' not in ns
         True
+        >>> G.neighbor_vertices('x')
+        Traceback (most recent call last):
+        ...
+        VertexDoesNotExist: The vertex <x> does not exist in this graph
         """
         try:
             return [e[0] for e in self.data[a]]
@@ -113,13 +135,17 @@ class Graph(object):
     def neighbors(self, a, b):
         """
         :return: True if vertices a and b are joined by an edge, and False otherwise.
-        :raises: VertexDoesNotExist if a or b are not in the graph.
+        :raises VertexDoesNotExist: if a or b are not in the graph.
 
         >>> G = Graph(vertices=['a'],edges=[('b','c',1)])
         >>> G.neighbors('c','b')
         True
         >>> G.neighbors('a','c')
         False
+        >>> G.neighbors('a','x')
+        Traceback (most recent call last):
+        ...
+        VertexDoesNotExist: The vertex <x> does not exist in this graph
         """
         if b not in self.data: raise VertexDoesNotExist, 'The vertex <{0}> does not exist in this graph'.format(b)
         try:
@@ -133,8 +159,10 @@ class Graph(object):
 
         :return: a 2-tuple comprising the minimum-weight path connecting vertices a and b, and the associated minimum weight.
             Return None if no such path exists.
-        :raises: VertexDoesNotExist if a or b are not in the graph.
+        :raises VertexDoesNotExist: if a or b are not in the graph.
         """
+
+        if a not in self.data or b not in self.data: raise VertexDoesNotExist
 
         # Keys are nodes, values are the distance from a
         distances = dict([ (v,INFINITY) for v in self.vertices ])
@@ -142,17 +170,24 @@ class Graph(object):
         # Keys are nodes, values are the previous node in the shortest path from a to b
         previous = dict([ (v,None) for v in self.vertices ])
 
-        try:
-            distances[a] = 0
-            Q = self.vertices
+        distances[a] = 0
+        Q = self.vertices
 
-            while len(Q):
-                next_closest_vertex = min(Q, key = lambda v: distances[v])
+        while len(Q):
+            next_closest_vertex = min(Q, key = lambda v: distances[v])
+            if distances[next_closest_vertex] == INFINITY:
+                break
 
-                if next_closest_vertex == b:
-                    # Found the shortest path
-                    return distances[b], [ v for v in previous[b]]+[b]
-
+            if next_closest_vertex == b:
+                distance = distances[b]
+                # Found the shortest path!
+                path = [b]
+                def path_home(v):
+                    if v == a:
+                        return [a]
+                    return  path_home(previous[v]) + [v]
+                return distance, path_home(b)
+            else:
                 next_closest_vertex_neighbors = self.neighbor_vertices(next_closest_vertex)
                 Q.remove(next_closest_vertex)
 
@@ -166,10 +201,7 @@ class Graph(object):
                         distances[current_vertex] = alt
                         previous[current_vertex] = next_closest_vertex
 
-            return None # no path
-        except KeyError:
-
-            raise VertexDoesNotExist
+        return None # no path
 
     def minimum_weight_path(self, a, b):
         """
@@ -177,11 +209,23 @@ class Graph(object):
 
         :return: a 2-tuple comprising the minimum-weight path connecting vertices a and b, and the associated minimum weight.
             Return None if no such path exists.
-        :raises: VertexDoesNotExist if a or b are not in the graph.
+        :raises VertexDoesNotExist: if a or b are not in the graph.
 
-        >>> G = Graph(vertices=['a'],edges=[('b','c',1),('a','c',2),('c','d',4)])
+        >>> G = Graph(vertices=['x','y'],edges=[('x','y',3),('b','c',1),('a','c',2),('c','d',6),('d','e',2),('c','e',100)])
         >>> G.minimum_weight_path('a','d')
-        (6, ['c', 'd'])
+        (8, ['a', 'c', 'd'])
+        >>> G.minimum_weight_path('a','e')
+        (10, ['a', 'c', 'd', 'e'])
+        >>> G = Graph(vertices=['x','y'],edges=[('x','y',3),('b','c',1),('a','c',2),('c','d',4),('d','e',2),('c','e',1)])
+        >>> G.minimum_weight_path('a','e')
+        (3, ['a', 'c', 'e'])
+        >>> G.minimum_weight_path('a','x')
+
+        >>> G.minimum_weight_path('a','foo')
+        Traceback (most recent call last):
+        ...
+        VertexDoesNotExist
+
         """
         return self._single_source_shortest_path(a,b)
 
@@ -192,10 +236,22 @@ class Graph(object):
         :return: a 2-tuple comprising the minimum-edge path connecting vertices a and b, and the associated minimum number
             of edges (e.g. a path comprising 3 edges is shorter than a path comprising 4 edges, regardless of the edge weights).
             Return None if no such path exists. Raise an exception if a or b are not in the graph.
-        :raises: VertexDoesNotExist if a or b are not in the graph.
+        :raises VertexDoesNotExist: if a or b are not in the graph.
 
-        >>> G = Graph(vertices=['a'],edges=[('b','c',1),('a','c',2),('c','d',4)])
+        >>> G = Graph(vertices=['x','y'],edges=[('x','y',3),('b','c',1),('a','c',2),('c','d',6),('d','e',2),('c','e',100)])
         >>> G.minimum_edge_path('a','d')
-        (2, ['c', 'd'])
+        (2, ['a', 'c', 'd'])
+        >>> G.minimum_edge_path('a','e')
+        (2, ['a', 'c', 'e'])
+        >>> G = Graph(vertices=['x','y'],edges=[('x','y',3),('b','c',1),('a','c',2),('c','d',4),('d','e',2),('c','e',1)])
+        >>> G.minimum_edge_path('a','e')
+        (2, ['a', 'c', 'e'])
+        >>> G.minimum_edge_path('a','x')
+
+        >>> G.minimum_edge_path('a','foo')
+        Traceback (most recent call last):
+        ...
+        VertexDoesNotExist
+
         """
         return self._single_source_shortest_path(a,b,False)
