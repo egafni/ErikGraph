@@ -9,7 +9,7 @@ Welcome to erikgraph's documentation!
 Introduction
 =============
 
-A Company asked me to write a class that implements the following specification:
+A company asked me to write a class that implements the following specification:
 
     A class Graph representing an undirected graph structure with weighted edges
     (i.e. a set of vertices with undirected edges connecting pairs of vertices, where each edge has a nonnegative weight).
@@ -47,8 +47,11 @@ A Company asked me to write a class that implements the following specification:
         """
         pass
 
-This is a classic graph problem, and can be solved using Dijkstra's algorithm.  My implementation runs in O(|V| + |E|)
-as all vertices and edges might have to be traversed.
+.. note::
+    This is a classic graph problem, and can be solved using Dijkstra's algorithm.  My implementation runs in O(|V| + |E|)
+    as all vertices and edges might have to be traversed.
+
+The code is available here: `<https://github.com/egafni/ErikGraph>`_.
 
 Install
 =========
