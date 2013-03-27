@@ -48,7 +48,7 @@ A company asked me to write a class that implements the following specification:
         pass
 
 .. note::
-    This is a classic graph problem, and can be solved using Dijkstra's algorithm.  My implementation runs in O(|V| + |E|)
+    This is a classic graph problem, and can be solved using `Dijkstra's algorithm <http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm>`_.  My implementation runs in O(|V| + |E|)
     as all vertices and edges might have to be traversed.
 
 The code is available here: `<https://github.com/egafni/ErikGraph>`_.
